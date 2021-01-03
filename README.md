@@ -15,7 +15,7 @@ Controller buttons are disabled (None) by default but can be set to: DPadLeft, D
 
 **Current limitations:**
 
-- Does not work in 1st person on motorcycles or bicycles (seems to detect 1st person as a cinematic view
+- Does not work in 1st person on motorcycles or bicycles (seems to detect 1st person as a cinematic view)
 - Cannot "press and hold" for temporary activation like "in game" control 
 - If the keybinding is same as "in game" binding, it will turn it on and off in quick succession for non-ELS vehicles
 
