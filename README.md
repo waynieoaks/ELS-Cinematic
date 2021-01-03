@@ -5,7 +5,7 @@ Allowing the cinematic camera when using ELS...
 
 Emergency Lighting System (ELS) currently disables the in game cinematic view due to keybinding issues. However, if you change the keybindings to avoid this - the in game view is still not available in ELS vehicles. 
 
-This script will simply allow you to set your own keybinding to activate / deactivate the in game cinematic view at will for both ELS and non ELS vehicles. (If not using ELS however, you do not need this unless you would like to use cinematic view while in 1st person. 
+This script will simply allow you to set your own keybinding to activate / deactivate the in game cinematic view at will for both ELS and non ELS vehicles. (If not using ELS however, you do not need this unless you would like to use cinematic view while in 1st person). 
 
 **Note:** I strongly suggest you avoid setting it to a keybinding that you use for ELS (or for any other mod for that matter). I also suggest not setting the same as the in game keybinding for cinematic view (as it can be seen as a double press, turning the view on and off again).
 
