@@ -11,6 +11,8 @@ namespace ELS_Cinematic
         public static string INIpath = "Plugins\\ELS-Cinematic.ini";
         public static Keys CinematicKey { get; set; }
         public static Keys CinematicModifierKey { get; set; }
+        public static ControllerButtons CinematicButton { get; set; }
+        public static ControllerButtons CinematicModifierButton { get; set; }
         public static Boolean ShowDebug { get; set; }
         public static Boolean CinematicActive { get; set; }
         public static Int32 CurrentFollowVehicleCamMode { get; set; }
@@ -30,26 +32,49 @@ namespace ELS_Cinematic
            
             Game.LogTrivial(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " has been initialised.");
 
-            // Key binding fiber
+            // Cinematic control fiber
             GameFiber.StartNew(delegate
             {
                 while (true)
                 {
                     GameFiber.Yield();
 
-                    // Disable the in game control action: 
-                   // NativeFunction.Natives.DISABLE_CONTROL_ACTION(32, 80, true); Does not work
+                    // Disable the in game control action:
+
+                    Game.DisableControlAction(0, GameControl.VehicleCinCam, true);
 
                     //Check for key press
-                    if (Game.IsKeyDown(CinematicKey) &&
-                        (Game.IsKeyDownRightNow(CinematicModifierKey) ||
-                            CinematicModifierKey == Keys.None))
+                    if (
+                            (Game.IsKeyDown(CinematicKey) 
+                                && (Game.IsKeyDownRightNow(CinematicModifierKey) 
+                                || CinematicModifierKey == Keys.None)
+                            ) 
+                            || 
+                            (Game.IsControllerButtonDown(CinematicButton) 
+                                && (Game.IsControllerButtonDownRightNow(CinematicModifierButton) 
+                                || CinematicModifierButton == ControllerButtons.None)
+                            )
+                        )
                     {
                         DoCinematic();
                         GameFiber.Sleep(1000);
                     }
                 }
+            });
 
+            // Exit vehicle fiber
+            GameFiber.StartNew(delegate
+            {
+                while (true)
+                {
+                    GameFiber.Yield();
+
+                    if (Game.IsControlPressed(0, GameControl.VehicleExit) == true)
+                    {
+                        DoViewCheck();
+                        GameFiber.Sleep(1000);
+                    }
+                }
             });
 
         }
@@ -61,19 +86,39 @@ namespace ELS_Cinematic
 
             try
             {
-                if (ini.DoesKeyExist("Keybindings", "CinematicKey")) { CinematicKey = ini.ReadEnum<Keys>("Keybindings", "CinematicKey", Keys.R); }
+                //Keyboard ini
+
+                if (ini.DoesKeyExist("Keyboard", "CinematicKey")) { CinematicKey = ini.ReadEnum<Keys>("Keyboard", "CinematicKey", Keys.R); }
                 else
                 {
-                    ini.Write("Keybindings", "CinematicKey", "R");
+                    ini.Write("Keyboard", "CinematicKey", "R");
                     CinematicKey = Keys.R;
                 }
 
-                if (ini.DoesKeyExist("Keybindings", "CinematicModifierKey")) { CinematicModifierKey = ini.ReadEnum<Keys>("Keybindings", "CinematicModifierKey", Keys.ControlKey); }
+                if (ini.DoesKeyExist("Keyboard", "CinematicModifierKey")) { CinematicModifierKey = ini.ReadEnum<Keys>("Keyboard", "CinematicModifierKey", Keys.ControlKey); }
                 else
                 {
-                    ini.Write("Keybindings", "CinematicModifierKey", "ControlKey");
+                    ini.Write("Keyboard", "CinematicModifierKey", "ControlKey");
                     CinematicModifierKey = Keys.ControlKey;
                 }
+
+                // Controller ini
+                
+                if (ini.DoesKeyExist("Controller", "CinematicButton")) { CinematicButton = ini.ReadEnum<ControllerButtons>("Controller", "CinematicButton", ControllerButtons.None); }
+                else
+                {
+                    ini.Write("Controller", "CinematicButton", "None");
+                    CinematicButton = ControllerButtons.None;
+                }
+
+                if (ini.DoesKeyExist("Controller", "CinematicModifierButton")) { CinematicModifierButton = ini.ReadEnum<ControllerButtons>("Controller", "CinematicModifierButton", ControllerButtons.None); }
+                else
+                {
+                    ini.Write("Controller", "CinematicModifierButton", "None");
+                    CinematicModifierButton = ControllerButtons.None;
+                }
+
+                // Other ini
 
                 if (ini.DoesKeyExist("Other", "ShowDebug")) { ShowDebug = ini.ReadBoolean("Other", "ShowDebug", false); }
                 else
@@ -104,7 +149,13 @@ namespace ELS_Cinematic
                     CinematicActive = NativeFunction.Natives.IS_CINEMATIC_CAM_RENDERING<bool>();
                     Command_Debug("Cinematic view was " + CinematicActive.ToString());
 
-                        if (CinematicActive == true)
+                    //bool IS_CINEMATIC_SHOT_ACTIVE = NativeFunction.Natives.IS_CINEMATIC_SHOT_ACTIVE<bool>();
+                    //int GET_FOLLOW_VEHICLE_CAM_VIEW_MODE = NativeFunction.Natives.GET_FOLLOW_VEHICLE_CAM_VIEW_MODE<int>();
+
+                    //Command_Debug("Cinematic Shot: " + IS_CINEMATIC_SHOT_ACTIVE.ToString());
+                    //Command_Debug("Vehicle Cam Mode: " + GET_FOLLOW_VEHICLE_CAM_VIEW_MODE.ToString());
+
+                    if (CinematicActive == true)
                         {
                             // Turn OFF the cinematic view
                             Command_Debug("Turning cinematic view OFF");
@@ -143,6 +194,35 @@ namespace ELS_Cinematic
             catch (Exception e)
             {
                 ErrorLogger(e, "Activation", "Error during view change sequence");
+            }
+        }
+
+        private static void DoViewCheck()
+        {
+            // This is to restore 1st person view in vehicle if exiting while cinematic view is on and last view was 1st person
+
+            if (Game.LocalPlayer.Character.IsInAnyVehicle(true)) {
+                try
+                {
+                    CinematicActive = NativeFunction.Natives.IS_CINEMATIC_CAM_RENDERING<bool>();
+
+                    if (CinematicActive == true)
+                    {
+                        // Turn OFF the cinematic view
+                        Command_Debug("Exiting vehicle while cinematic view was on");
+
+                        if (LastFollowVehicleCamMode == 4)
+                        {
+                            Command_Debug("Seting vehicle view back to 1st person");
+                            // Need to go back to 1st person
+                            NativeFunction.Natives.SET_FOLLOW_VEHICLE_CAM_VIEW_MODE(4);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    ErrorLogger(e, "Activation", "Error during vehicle exit");
+                }
             }
         }
 
