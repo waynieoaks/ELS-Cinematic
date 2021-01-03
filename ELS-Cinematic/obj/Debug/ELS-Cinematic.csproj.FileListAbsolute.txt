@@ -1,0 +1,16 @@
+E:\repositories\ELS-Cinematic\ELS-Cinematic\ELS-Cinematic\obj\Debug\ELS-Cinematic.csprojAssemblyReference.cache
+E:\repositories\ELS-Cinematic\ELS-Cinematic\ELS-Cinematic\bin\Debug\ELS-Cinematic.dll
+E:\repositories\ELS-Cinematic\ELS-Cinematic\ELS-Cinematic\bin\Debug\ELS-Cinematic.pdb
+E:\repositories\ELS-Cinematic\ELS-Cinematic\ELS-Cinematic\bin\Debug\RagePluginHookSDK.dll
+E:\repositories\ELS-Cinematic\ELS-Cinematic\ELS-Cinematic\bin\Debug\RagePluginHookSDK.xml
+E:\repositories\ELS-Cinematic\ELS-Cinematic\ELS-Cinematic\obj\Debug\ELS-Cinematic.csproj.CopyComplete
+E:\repositories\ELS-Cinematic\ELS-Cinematic\ELS-Cinematic\obj\Debug\ELS-Cinematic.dll
+E:\repositories\ELS-Cinematic\ELS-Cinematic\ELS-Cinematic\obj\Debug\ELS-Cinematic.pdb
+E:\repositories\ELS-Cinematic\ELS-Cinematic\bin\Debug\ELS-Cinematic.dll
+E:\repositories\ELS-Cinematic\ELS-Cinematic\bin\Debug\ELS-Cinematic.pdb
+E:\repositories\ELS-Cinematic\ELS-Cinematic\bin\Debug\RagePluginHookSDK.dll
+E:\repositories\ELS-Cinematic\ELS-Cinematic\bin\Debug\RagePluginHookSDK.xml
+E:\repositories\ELS-Cinematic\ELS-Cinematic\obj\Debug\ELS-Cinematic.csprojAssemblyReference.cache
+E:\repositories\ELS-Cinematic\ELS-Cinematic\obj\Debug\ELS-Cinematic.csproj.CopyComplete
+E:\repositories\ELS-Cinematic\ELS-Cinematic\obj\Debug\ELS-Cinematic.dll
+E:\repositories\ELS-Cinematic\ELS-Cinematic\obj\Debug\ELS-Cinematic.pdb
