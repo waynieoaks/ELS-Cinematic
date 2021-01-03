@@ -13,11 +13,11 @@ namespace ELS_Cinematic
         public static Keys CinematicModifierKey { get; set; }
         public static Boolean ShowDebug { get; set; }
         public static Boolean CinematicActive { get; set; }
+        public static Int32 CurrentFollowVehicleCamMode { get; set; }
+        public static Int32 LastFollowVehicleCamMode { get; set; }
 
-        public static GameControl VehicleCinCam_Control { get; set; }
-
-    //Initialization of the plugin.
-    public static void Main()
+        //Initialization of the plugin.
+        public static void Main()
         {
             Game.LogTrivial("Loading ELS-Cinematic settings...");
             LoadValuesFromIniFile();
@@ -88,37 +88,56 @@ namespace ELS_Cinematic
             {
                 ErrorLogger(e, "Initialisation", "Unable to read INI file.");
             }
-
         }
 
         private static void DoCinematic()
         {
-
             try
             {
 
                 if (Game.LocalPlayer.Character.IsInAnyVehicle(true))
                 {
-                // Get current state
-                CinematicActive = NativeFunction.Natives.IS_CINEMATIC_CAM_RENDERING<bool>();
-                Command_Debug("Cinematic view was " + CinematicActive.ToString());
+                    // What cam mode are we in?
+                    CurrentFollowVehicleCamMode = NativeFunction.Natives.GET_FOLLOW_VEHICLE_CAM_VIEW_MODE<Int32>();
+                    
+                    // Get current state
+                    CinematicActive = NativeFunction.Natives.IS_CINEMATIC_CAM_RENDERING<bool>();
+                    Command_Debug("Cinematic view was " + CinematicActive.ToString());
 
-                    if (CinematicActive == true)
-                    {
-                        // Turn OFF the cinematic view
-                        Command_Debug("Turning Cinematic view OFF");
-                        NativeFunction.Natives.SET_CINEMATIC_MODE_ACTIVE(false);
-                    } else
-                    {
-                        // Turn ON the cinematic view 
-                        Command_Debug("Turning Cinematic view ON");
-                        NativeFunction.Natives.SET_CINEMATIC_MODE_ACTIVE(true);
+                        if (CinematicActive == true)
+                        {
+                            // Turn OFF the cinematic view
+                            Command_Debug("Turning cinematic view OFF");
+
+                            // FIrst turn off the cinematic view
+                            NativeFunction.Natives.SET_CINEMATIC_MODE_ACTIVE(false);
+
+                            if (LastFollowVehicleCamMode == 4)
+                                {
+                                // Need to go back to 1st person
+                                NativeFunction.Natives.SET_FOLLOW_VEHICLE_CAM_VIEW_MODE(4);
+                                }
+                        } else {
+                            // Turn ON the cinematic view 
+                            Command_Debug("Turning cinematic view ON");
+
+                            if (CurrentFollowVehicleCamMode == 4)
+                                {
+                                    // You are in 1st person
+                                    NativeFunction.Natives.SET_FOLLOW_VEHICLE_CAM_VIEW_MODE(0);
+                                    LastFollowVehicleCamMode = 4;
+                                }
+                            // Make sure we remember the view we were in 
+                            LastFollowVehicleCamMode = CurrentFollowVehicleCamMode;
+
+                            // Now turn on the cinematic view
+                            NativeFunction.Natives.SET_CINEMATIC_MODE_ACTIVE(true);
+                        }
                     }
-                }
-                else
-                {
-                    Command_Debug("Not switching Cinematic view as not in vehicle");
-                }
+                    else
+                    {
+                        Command_Debug("Not switching cinematic view as not in vehicle");
+                    }
 
             }
             catch (Exception e)
