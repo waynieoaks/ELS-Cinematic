@@ -11,13 +11,13 @@ This script will simply allow you to set your own keybinding to activate / deact
 
 List of potential keybindings can be found: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.keys?view=netframework-4.8 or to disable a binding (e.g. the modifier key) set it to None
 
-Controller buttons are disabled (None) by default but can be set to: DPadLeft, DPadRight, DPadUp, DPadDown, X, Y, A, B, LeftThumb, RightThumb, LeftShoulder, RightShoulder, Back or Start
+Controller buttons are disabled (None) by default but can be set to: DPadLeft, DPadRight, DPadUp, DPadDown, X, Y, A, B, LeftThumb, RightThumb, LeftShoulder, RightShoulder, Back or Start **Be wary of conflicts with other controller bindings**
 
 **Current limitations:**
 
 - Does not work in 1st person on motorcycles or bicycles (seems to detect 1st person as a cinematic view)
 - Cannot "press and hold" for temporary activation like "in game" control 
-- If the keybinding is same as "in game" binding, it will turn it on and off in quick succession for non-ELS vehicles
+- If the keybinding is same as "in game" binding, it may turn it on and off in quick succession for non-ELS vehicles
 
 **Installation:**
 
@@ -28,9 +28,10 @@ Controller buttons are disabled (None) by default but can be set to: DPadLeft, D
 **Version history:** 
 
 1.0.2
+- Attempt to prevent "in game" cinematic view keybinding conflict
 - Remember if 1st person if exiting vehicle in cinematic view
 
-1.0.1
+1.0.1 (Unreleased)
 - Enable cinematic view via controller
 - Enable cinematic view while in 1st person
 
