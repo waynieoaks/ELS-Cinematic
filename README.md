@@ -1,7 +1,7 @@
 # ELS Cinematic
 Allowing the cinematic camera when using ELS...
 
-**About:** 
+## About: ##
 
 Emergency Lighting System (ELS) currently disables the in game cinematic view due to keybinding issues. However, if you change the keybindings to avoid this - the in game view is still not available in ELS vehicles. 
 
@@ -13,19 +13,19 @@ List of potential keybindings can be found: https://docs.microsoft.com/en-us/dot
 
 Controller buttons are disabled (None) by default but can be set to: DPadLeft, DPadRight, DPadUp, DPadDown, X, Y, A, B, LeftThumb, RightThumb, LeftShoulder, RightShoulder, Back or Start **Be wary of conflicts with other controller bindings**
 
-**Current limitations:**
+## Current limitations: ##
 
 - Does not work in 1st person on motorcycles or bicycles (seems to detect 1st person as a cinematic view)
 - Cannot "press and hold" for temporary activation like "in game" control 
 - If the keybinding is same as "in game" binding, it may turn it on and off in quick succession for non-ELS vehicles
 
-**Installation:**
+## Installation: ##
 
 1. Copy the plugins folder into your "Grand Theft Auto V" install folder 
 2. Edit the .ini to meet your requirements
 **Note:** Avoid conflicting keys / buttons with ELS or the in game controls
 
-**Version history:** 
+## Version history: ##
 
 1.0.2
 - Attempt to prevent "in game" cinematic view keybinding conflict
